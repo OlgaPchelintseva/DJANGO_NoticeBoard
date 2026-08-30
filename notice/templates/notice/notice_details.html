@@ -1,0 +1,14 @@
+{% extends 'notice/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+    <article style="padding: 30px;">
+        <h1>{{ notice.title }}</h1>
+        <span>{{ notice.author_name }}</span>
+        <div>{{ notice.created_at|date:"d.m.Y H:i" }}</div>
+        <div style="margin: 10px 0;">{{ notice.content }}</div>
+    </article>
+    <div>
+        <a href="{% url 'notice:notice_list' %}" style="text-decoration: none; color: #3F2719; font-weight: 600;">← Назад к списку</a>
+    </div>
+{% endblock %}

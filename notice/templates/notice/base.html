@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} Публичная доска объявлений {% endblock %}</title>
+</head>
+<body style="background-color: #DEBFC7; color: #3F2719; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <header style="display: flex; justify-content: space-around; align-items: center;">
+        <h1>
+            <a href="{% url 'notice:notice_list' %}" style="text-decoration: none; color: #3F2719; cursor: pointer;">Публичная доска объявлений</a>
+        </h1>
+        <nav><a href="/admin/" target="_blank" style="text-decoration: none; color: #3F2719">Кабинет администратора</a></nav>
+    </header>
+    <main>
+        {% if messages %}
+        <div>
+            {% for message in messages %}
+            <div>{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
