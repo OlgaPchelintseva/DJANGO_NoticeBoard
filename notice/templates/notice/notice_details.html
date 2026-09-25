@@ -2,13 +2,33 @@
 {% block title %} {{ page_title }} {% endblock %}
 
 {% block content %}
-    <article style="padding: 30px;">
-        <h1>{{ notice.title }}</h1>
-        <span>{{ notice.author_name }}</span>
-        <div>{{ notice.created_at|date:"d.m.Y H:i" }}</div>
-        <div style="margin: 10px 0;">{{ notice.content }}</div>
+    <article class="max-w-3xl mx-auto mt-12 p-8 rounded-2xl bg-gradient-to-br from-white via-zinc-50 to-zinc-100 border border-zinc-200 shadow-sm">
+        <h1 class="text-pink-900 text-2xl font-bold flex items-center gap-3">
+            {{ notice.title }}
+        </h1>
+        <span class="inline-block mt-3 text-slate-600 text-sm font-medium">{{ notice.author_name }}</span>
+        <div class="text-slate-500 text-sm mt-1">{{ notice.created_at|date:"d.m.Y H:i" }}</div>
+        <div class="mt-6 text-slate-800 leading-relaxed">{{ notice.content }}</div>
+        {% if user.is_authenticated %}
+            {% if notice.author_name == user %}
+                <a href="{% url 'notice:edit_notice' notice.id %}" class="inline-block mt-6 mr-3 px-5 py-2.5 rounded-lg bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 active:scale-[0.98] transition-all duration-150">Редактировать</a>
+            {% endif %}
+            {% if notice.author_name == user %}
+                <a href="{% url 'notice:delete_notice' notice.id %}" class="inline-block mt-6 px-5 py-2.5 rounded-lg bg-white text-red-600 border border-red-200 text-sm font-medium hover:bg-red-50 active:scale-[0.98] transition-all duration-150">Удалить</a>
+            {% endif %}
+        {% endif %}
+        {% if delete_confirm %}
+            <div class="mt-6 p-5 rounded-xl bg-red-50 border border-red-200">
+                <p class="text-slate-700 text-sm font-medium mb-4">Вы действительно хотите удалить объявление?</p>
+                <form action="{% url 'notice:delete_notice' notice.id %}" method="post" class="flex items-center gap-3">
+                    {% csrf_token %}
+                    <button type="submit" name="confirm_delete" class="px-5 py-2.5 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 active:scale-[0.98] transition-all duration-150 cursor-pointer">Да, удалить</button>
+                    <a href="{% url 'notice:notice_details' notice.id %}" class="px-5 py-2.5 rounded-lg bg-white text-slate-600 border border-zinc-200 text-sm font-medium hover:bg-zinc-50 transition-all duration-150 cursor-pointer">Отмена</a>
+                </form>
+            </div>
+        {% endif %}
     </article>
-    <div>
-        <a href="{% url 'notice:notice_list' %}" style="text-decoration: none; color: #3F2719; font-weight: 600;">← Назад к списку</a>
+    <div class="max-w-3xl mx-auto mt-6">
+        <a href="{% url 'notice:notice_list' %}" class="inline-flex items-center gap-1 text-teal-600 hover:text-teal-700 hover:underline text-sm font-medium transition-colors">← Назад к списку</a>
     </div>
 {% endblock %}

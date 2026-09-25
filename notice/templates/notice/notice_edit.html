@@ -1,0 +1,16 @@
+{% extends 'notice/base.html' %}
+{% block title %} {{ page_title }} {% endblock %}
+
+{% block content %}
+    <h1 class="max-w-3xl mx-auto mt-12 text-pink-900 text-2xl font-bold flex items-center gap-3">
+        <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span>
+        Редактирование "{{ notice.title }}"
+    </h1>
+    <form method="post" class="max-w-md w-full mx-auto mt-6 p-4 rounded-xl bg-white border border-zinc-200 shadow-sm">
+        {% csrf_token %}
+        <div class="space-y-3">
+            {{ form }}
+        </div>
+        <button type="submit" class="w-full bg-pink-600 text-white py-2.5 rounded-lg font-medium hover:bg-pink-700 active:scale-[0.98] transition-all duration-150 mt-4 cursor-pointer">Сохранить</button>
+    </form>
+{% endblock %}

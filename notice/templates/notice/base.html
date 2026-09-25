@@ -1,28 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load tailwind_tags %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} Публичная доска объявлений {% endblock %}</title>
+    {% tailwind_css %}
 </head>
-<body style="background-color: #DEBFC7; color: #3F2719; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-    <header style="display: flex; justify-content: space-around; align-items: center;">
-        <h1>
-            <a href="{% url 'notice:notice_list' %}" style="text-decoration: none; color: #3F2719; cursor: pointer;">Публичная доска объявлений</a>
+<body class="bg-zinc-100">
+    <header class="bg-pink-900 text-white flex justify-between h-16 items-center shadow-md shadow-pink-300/50 border-b-1 border-pink-300">
+        <h1 class="text-2xl font-medium pl-10 text-teal-50">
+            <a href="{% url 'notice:notice_list' %}">Публичная доска объявлений</a>
         </h1>
-        <nav><a href="/admin/" target="_blank" style="text-decoration: none; color: #3F2719">Кабинет администратора</a></nav>
+        <nav class="flex gap-10 pr-10">
+            {% if user.is_authenticated %}
+                <p class="p-2 transition duration-500 border-b-1 p-2 rounded-full">Привет, <b>{{ user.first_name }}</b>!</p>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="p-2 transition duration-500 hover:border-b-1 hover:rounded-full cursor-pointer
+                {% if request.resolver_match.view_name == 'login' %}
+                    border-b-1 p-2 rounded-full 
+                {% endif %}">Выйти</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="p-2 transition duration-500 hover:border-b-1 hover:rounded-full 
+                {% if request.resolver_match.view_name == 'login' %}
+                    border-b-1 p-2 rounded-full 
+                {% endif %}">Войти</a>
+                <a href="{% url 'notice:register' %}" class="p-2 transition duration-500 hover:border-b-1 hover:rounded-full 
+                {% if request.resolver_match.view_name == 'notice:register' %}
+                    border-b-1 p-2 rounded-full 
+                {% endif %}">Зарегистрироваться</a>
+            {% endif %}
+            <a href="/admin/" target="_blank" class="p-2 transition duration-500 hover:border-b-1 hover:rounded-full ">Админка</a>
+        </nav>
     </header>
     <main>
         {% if messages %}
-        <div>
-            {% for message in messages %}
-            <div>{{ message }}</div>
-            {% endfor %}
-        </div>
+            <div class="m-2 mt-0 space-y-2">
+                {% for message in messages %}
+                <div class="p-3 rounded-lg text-sm font-medium">
+                    {% if message.tags == 'success' %}
+                    <span class="text-green-700 bg-green-50 border-green-200">
+                        ✅ {{ message }}
+                    </span>
+                    {% elif message.tags == 'error' or message.tags == 'danger' %}
+                    <span class="text-red-700 bg-red-50 border-red-200">
+                        ❌ {{ message }}
+                    </span>
+                    {% else %}
+                    <span class="text-slate-700 bg-zinc-100 border-zinc-300">
+                        {{ message }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
         {% endif %}
 
         {% block content %}
         {% endblock %}
     </main>
+{% load django_browser_reload %}
+{% django_browser_reload_script %}
 </body>
 </html>
