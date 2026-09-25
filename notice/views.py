@@ -21,13 +21,7 @@ def notice_list(request):
             messages.success(request, 'Объявление создано')
             return redirect('notice:notice_list')
         else:
-            messages.error(request, 'Исправьте ошибку в форме')
-            context = {
-                'notices': notices,
-                'form': form,
-                'page_title': 'Доска объявлений'
-            }
-        return render(request, 'notice/notice_list.html', context)  
+            messages.error(request, 'Исправьте ошибку в форме') 
     else:
         form = NoticeCreateForm()
 
